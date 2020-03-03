@@ -1,3 +1,4 @@
+# pylint: disable=no-self-use
 """GaussianMLPModule."""
 import abc
 
@@ -161,7 +162,7 @@ class GaussianMLPBaseModule(nn.Module):
             *inputs: Input to the module.
 
         Returns:
-            torch.Tensor: Module output.
+            torch.Tensor: Independent distribution.
 
         """
         mean, log_std_uncentered = self._get_mean_and_log_std(*inputs)
@@ -182,7 +183,6 @@ class GaussianMLPBaseModule(nn.Module):
 
         return dist
 
-    # pylint: disable=no-self-use
     def _to_scalar_if_not_none(self, tensor):
         """Convert torch.Tensor of a single value to a Python number.
 
