@@ -1,6 +1,7 @@
 """Evaluator which tests Meta-RL algorithms on test environments."""
 from garage import log_performance, TrajectoryBatch
 from garage.sampler import LocalSampler
+from garage.sampler.worker import DefaultWorker
 
 
 class MetaEvaluator:
@@ -35,16 +36,24 @@ class MetaEvaluator:
                  *,
                  test_task_sampler,
                  max_path_length,
+                 worker_class=DefaultWorker,
+                 worker_args=None,
                  n_test_tasks=None,
                  n_exploration_traj=1,
                  prefix='MetaTest'):
         self._test_task_sampler = test_task_sampler
+        if worker_args is None:
+            worker_args = {}
         if n_test_tasks is None:
             n_test_tasks = test_task_sampler.n_tasks
         self._n_test_tasks = n_test_tasks
         self._n_exploration_traj = n_exploration_traj
         self._test_sampler = runner.make_sampler(
-            LocalSampler, n_workers=1, max_path_length=max_path_length)
+            LocalSampler,
+            n_workers=1,
+            max_path_length=max_path_length,
+            worker_class=worker_class,
+            worker_args=worker_args)
         self._eval_itr = 0
         self._prefix = prefix
 
