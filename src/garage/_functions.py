@@ -34,10 +34,14 @@ def log_multitask_performance(itr, batch, discount, name_map=None):
             task_name = trajectory.env_infos['task_name'][0]
         except KeyError:
             try:
+                task_id = None
                 task_id = trajectory.env_infos['task_id'][0]
                 task_name = name_map[task_id]
             except KeyError:
-                task_name = 'Task #{}'.format(task_id)
+                if task_id is not None:
+                    task_name = 'Task #{}'.format(task_id)
+                else:
+                    task_name = 'Unknown Task'
         traj_by_name[task_name].append(trajectory)
     if name_map is None:
         task_names = traj_by_name.keys()
